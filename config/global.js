@@ -23,7 +23,7 @@ global.headers = {
   'Accept': 'application/json',
   'Content-Type': 'application/json'
 }
-
+global.host = 'http://118.190.157.252:8080/'
 // Fetch 封装，log 中显示 fetch详情
 global.__fetch = fetch
 global._fetch = function (uri, options, ...args) {

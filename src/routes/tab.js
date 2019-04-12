@@ -2,16 +2,16 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { createBottomTabNavigator } from 'react-navigation'
 import { connect } from 'react-redux'
-
-import Tab1 from '../containers/tab1/index'
-import Tab2 from '../containers/tab2/index'
-
+import Color from '../style/Color'
+import Home from '../containers/home/index'
+import UserHome from '../containers/userHome/index'
+import Adapter from '../style/adapter'
 export const Navigator = createBottomTabNavigator({
-  Tab1: {
-    screen: Tab1
+  Home: {
+    screen: Home,
   },
-  Tab2: {
-    screen: Tab2
+  UserHome: {
+    screen: UserHome
   }
 }, {
   animationEnabled: false, // 切换页面时不显示动画
@@ -26,7 +26,7 @@ export const Navigator = createBottomTabNavigator({
     showIcon: true, // android 默认不显示 icon, 需要设置为 true 才会显示
     indicatorStyle: { height: 0 }, // android 中TabBar下面会显示一条线，高度设为 0 后就不显示线
     labelStyle: { // 文字样式
-      fontSize: 12,
+      fontSize: 20,
       bottom: 5
     },
     style: { // 整个 Tabbar 样式

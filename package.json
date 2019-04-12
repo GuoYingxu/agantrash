@@ -20,12 +20,17 @@
   "dependencies": {
     "@react-native-community/async-storage": "latest",
     "@react-native-community/netinfo": "latest",
+    "axios": "^0.18.0",
+    "babel-preset-react-native": "^4.0.1",
+    "color": "^3.1.0",
     "lodash": "latest",
+    "metro": "^0.53.1",
     "react": "16.8.3",
     "react-native": "0.59.4",
     "react-native-gesture-handler": "latest",
+    "react-native-qrcode": "^0.2.7",
     "react-native-splash-screen": "^3.2.0",
-    "react-native-status-bar-height": "latest",
+    "react-native-status-bar-height": "^2.3.1",
     "react-native-storage": "latest",
     "react-native-tab-view": "latest",
     "react-native-vector-icons": "latest",
@@ -34,7 +39,8 @@
     "react-redux": "latest",
     "redux": "latest",
     "redux-logger": "latest",
-    "redux-thunk": "latest"
+    "redux-thunk": "latest",
+    "sane": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
