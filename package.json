@@ -29,6 +29,7 @@
     "react-native": "0.59.4",
     "react-native-gesture-handler": "latest",
     "react-native-qrcode": "^0.2.7",
+    "react-native-snap-carousel": "^3.7.5",
     "react-native-splash-screen": "^3.2.0",
     "react-native-status-bar-height": "^2.3.1",
     "react-native-storage": "latest",

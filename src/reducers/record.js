@@ -1,9 +1,9 @@
 import {
   RECORD_UPDATED
 } from '../actions/type'
-import _ from  'lodash'
 const initialState = {
   total:0,
+  page:1,
   list:[]
 }
 

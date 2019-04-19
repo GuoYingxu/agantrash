@@ -10,9 +10,6 @@ class LoadingScreen extends React.Component {
     // this.props.navigation.navigate('App')
     this.props.checkLoginState()
   }
-  regist=()=>{
-    this.props.navigation.navigate('Regist')
-  }
   login=()=>{
     this.props.navigation.navigate('Login')
   }
@@ -22,9 +19,7 @@ class LoadingScreen extends React.Component {
         <StatusBar translucent={true} hidden={true} />
         <Image resizeMode='stretch' source={require('../../assets/images/launch_screen.png')} style={{width: '100%', flex:1}} ></Image>
         <View style={{position:'absolute',top:'60%',width:'100%',display:'flex',flexDirection:'row',padding:40,justifyContent:'center'}}>
-          <TouchableOpacity style={[Style.button,Style.reg]} onPress={()=> this.regist()}>
-            <Text style={{color:Color.black}}>注册</Text>
-          </TouchableOpacity>
+        
           <TouchableOpacity style={[Style.button,Style.login]} onPress={()=> this.login()}>
             <Text style={{color:Color.white}}>登录</Text>
           </TouchableOpacity>

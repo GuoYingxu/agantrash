@@ -3,58 +3,83 @@ import { NavigationActions } from 'react-navigation'
 export function checkLoginState(){
   return (dispatch, getState) =>{
     let {auth} = getState()
-    storage.load({key:'token'}).then(async token=>{
-      console.log(token)
-      const data = await getUserInfo(token);
-      if(data){
-        const userInfo = data.result
-        dispatch({type:USER_UPDATED,data:{
-          access_token: token,
-          // expires_in: res.expires_in,
-          // refresh_token: res.refresh_token,
-          // scope: res.scope,
-          // token_type: res.token_type,
-          userInfo:userInfo,
-          phone:userInfo && userInfo.phone,
-          username:userInfo && userInfo.username,
-          is_logined:true
-        }})
-        storage.save({
-          key:'token',
-          data:token
-        })
-        dispatch(NavigationActions.navigate({routeName:'App'}))
+    // console.log({key:'token'})
+    storage.load({key:'tokenAccess'}).then(async token=>{
+      if(token && token.accessToken){
+        let data = await getUserInfo(token.accessToken);
+        console.log('data---',data)
+        if(data.error){ //刷新token
+          console.log('=====refres')
+          token =await refreshToken(token)
+          if(token !=null && token.accessToken){
+            data = await getUserInfo(token.accessToken)
+            if(data.errorMessages){ //用户不存在
+              console.log('---tkremove')
+              storage.remove({
+                key: 'tokenAccess'
+              });
+              return 
+            }
+          }else{ 
+            return 
+          }
+        }
+      
+        if(data.result){
+          const userInfo = data.result
+          dispatch({type:USER_UPDATED,data:{
+            accessToken: token.accessToken,
+            expiresIn: token.expiresIn,
+            refreshToken: token.refreshToken,
+            scope: token.scope,
+            tokenType: token.tokenType,
+            userInfo:userInfo,
+            phone:userInfo && userInfo.phone,
+            nickname:userInfo && userInfo.nickname || '您的昵称',
+            isLogined:true
+          }})
+          storage.save({
+            key:'tokenAccess',
+            data:{
+              accessToken: token.accessToken,
+              expiresIn: token.expiresIn,
+              refreshToken: token.refreshToken,
+              scope: token.scope,
+              tokenType: token.tokenType,
+            }
+          })
+        }else{
+          dispatch(NavigationActions.navigate({routeName:'Login'}))
+        }
       }else{
-        dispatch(NavigationActions.navigate({routeName:'Login'}))
+        console.log('---tkremove')
+        storage.remove({
+          key:'tokenAccess',
+        })
       }
     }).catch(err=>{
-      console.log(err)
+      console.log('---',err)
       dispatch({
         type: USER_UPDATED,
         data:{
-          is_logined:false
+          isLogined:false
         }
       })
-      dispatch(NavigationActions.navigate({routeName: 'Login'}))
+     
     })
   }
 }
-export function sendMsg(phone,type){
-
+export function sendMsg(phone){
   return (dispatch,getState) => {
-    const {auth} = getState()
-    let url = `${host}notification/notification-anon/codes?phone=${phone}&type=${type}`
+    dispatch({type:USER_UPDATED,data:{phone:phone}})
+    let url = `${host}notification/notification-anon/codes?phone=${phone}&type=login`
     _fetch(url,
       {
         method:'POST',
       }).then(res=>{
         if(res.result){
           let actiondata = {}
-          if(type=='login'){
-            actiondata.loginKey = res.result.key
-          }else{
-            actiondata.registKey = res.result.key
-          }
+          actiondata.loginKey = res.result.key
          dispatch({type:USER_UPDATED,data:{...actiondata}})
         }
       }).catch(er=>{
@@ -62,31 +87,40 @@ export function sendMsg(phone,type){
       })
   }
 }
-export function regist(phone,code){
-  return (dispatch,getState) => {
-    const {auth} = getState()
-    let url = `${host}user-center/customer/phone-rigister?phone=${phone}&code=${code}&key=${auth.registKey}`
-    _fetch(url,
-      {
-        method:'POST'
-      }).then(res=>{
-        if(res.success){
-          dispatch(NavigationActions.navigate({routeName: 'Login'})) 
-        }
-      }).catch(res=> console.log(res))
-  }
-}
+
 function getUserInfo(token){
   const url = `${host}user-center/customer/current?access_token=${token}`
   return _fetch(url,{
     method:'GET'
-  }).then(res=>{
-    console.log(res)
+  }).then(async res=>{  
+    console.log('geutuser',res)
     return res
   }).catch(err=>{
+    
     return {
       result:null
     }
+  })
+}
+function refreshToken(token){
+  const url = `${host}sys/refresh_token?refresh_token=${token.refreshToken}`
+  console.log('refresh token')
+  return _fetch(url,{
+    method:"post"
+  }).then(res=>{
+    if(res.access_token){
+      return {
+        accessToken: res.access_token,
+        expiresIn: res.expires_in,
+        refreshToken: res.refresh_token,
+        scope: res.scope,
+        tokenType: res.token_type,
+      }
+    }else{
+      return null
+    }
+  }).catch(err=>{
+    return null
   })
 }
   
@@ -104,19 +138,26 @@ export function login(phone,code){
           const data = await getUserInfo(res.access_token);
           const userInfo = data.result
           dispatch({type:USER_UPDATED,data:{
-            access_token: res.access_token,
-            expires_in: res.expires_in,
-            refresh_token: res.refresh_token,
+            accessToken: res.access_token,
+            expiresIn: res.expires_in,
+            refreshToken: res.refresh_token,
             scope: res.scope,
-            token_type: res.token_type,
+            tokenType: res.token_type,
             userInfo:userInfo,
             phone:userInfo && userInfo.phone,
-            username:userInfo && userInfo.username
+            nickname:userInfo && userInfo.nickname || '您的昵称',
+            isLogined:true
           }})
 
           storage.save({
-            key:'token',
-            data:res.access_token
+            key:'tokenAccess',
+            data:{
+              accessToken: res.access_token,
+              expiresIn: res.expires_in,
+              refreshToken: res.refresh_token,
+              scope: res.scope,
+              tokenType: res.token_type,
+            }
           })
           dispatch(NavigationActions.navigate({routeName:'App'}))
         }

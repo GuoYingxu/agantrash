@@ -6,11 +6,9 @@ import {
 
 const initialState = {
   id: null,
-  username: null,
+  nickname: "您的昵称",
   phone:'',
-  is_logined: false,
-  registKey:'',
-  registCode:'',
+  isLogined: false,
   loginKey:'',
   loginCode:''
 }

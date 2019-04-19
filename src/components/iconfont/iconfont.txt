@@ -7,6 +7,8 @@
 
 .icon-iconfontjiantou1:before { content: "\e631"; }
 
+.icon-iconfontjiantou3:before { content: "\e633"; }
+
 .icon-shouye:before { content: "\e677"; }
 
 .icon-jiufuqianbaoicon09:before { content: "\e696"; }
@@ -23,6 +25,8 @@
 
 .icon-guanbi:before { content: "\e690"; }
 
+.icon-youjiantou:before { content: "\e735"; }
+
 .icon-fenlei:before { content: "\e601"; }
 
 .icon-yaoqing:before { content: "\e613"; }
@@ -30,6 +34,8 @@
 .icon-nanzhi:before { content: "\e62a"; }
 
 .icon-guanyuwomen:before { content: "\e602"; }
+
+.icon-tongzhi:before { content: "\e71d"; }
 
 .icon-hezichengxu:before { content: "\e620"; }
 

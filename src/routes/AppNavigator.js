@@ -11,6 +11,6 @@ export default createSwitchNavigator({
   App: AppStack,
   Auth: AuthStack
 }, {
-  initialRouteName: 'Loading',
+  initialRouteName: 'App',
   resetOnBlur: true
 })

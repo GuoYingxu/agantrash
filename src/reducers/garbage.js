@@ -1,7 +1,6 @@
 import {
   GARBAGE_UPDATED
 } from '../actions/type'
-import _ from  'lodash'
 const initialState = {
   type:[]
 }

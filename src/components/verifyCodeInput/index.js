@@ -69,7 +69,7 @@ class VerifyCode extends PureComponent {
                     underlineColorAndroid="transparent"
                     caretHidden
                     style={styles.textInput}
-                    autoFocus={false}
+                    autoFocus={true}
                     keyboardType={'numeric'}
                     maxLength={verifyCodeLength}
                     onChangeText={(text) => {

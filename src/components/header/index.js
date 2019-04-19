@@ -3,7 +3,7 @@ import { View, StatusBar, StyleSheet, Animated } from 'react-native'
 import PropTypes from 'prop-types'
 import { NavigationActions } from 'react-navigation'
 
-import HeaderIcon from './headerIcon'
+import HeaderIcon from './HeaderIcon'
 
 const STATUS_BAR_HEIGHT = Adapter.height_sb
 const HEADER_CONTENT_HEIGHT = Adapter.height_h

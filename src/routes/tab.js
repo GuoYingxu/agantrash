@@ -26,15 +26,15 @@ export const Navigator = createBottomTabNavigator({
     showIcon: true, // android 默认不显示 icon, 需要设置为 true 才会显示
     indicatorStyle: { height: 0 }, // android 中TabBar下面会显示一条线，高度设为 0 后就不显示线
     labelStyle: { // 文字样式
-      fontSize: 20,
-      bottom: 5
+      fontSize: 0,
+      bottom: 0
     },
     style: { // 整个 Tabbar 样式
       height: Adapter.height_nav,
       borderStyle: 'solid',
       borderTopWidth: StyleSheet.hairlineWidth,
       borderTopColor: Color.l_high,
-      backgroundColor: Color.white
+      backgroundColor: Color.white,
     }
   }
 })

@@ -1,14 +1,13 @@
 import { createStackNavigator } from 'react-navigation'
 
 import Login from '../containers/auth/login'
-import Regist from '../containers/auth/regist'
+import LoginApp from '../containers/auth/loginApp'
 const AuthStack = createStackNavigator({
   Login: {
     screen: Login
   },
-  Regist:{
-    screen:Regist
+  LoginApp:{
+    screen: LoginApp
   }
 })
-
 export default AuthStack

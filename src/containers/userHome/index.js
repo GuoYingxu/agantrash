@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text,Image,StyleSheet,View,TouchableOpacity} from 'react-native'
+import {Text,Image,StyleSheet,View,TouchableOpacity,StatusBar} from 'react-native'
 import Iconfont from '../../components/iconfont'
 import Wrapper from '../../components/wrapper';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
@@ -8,86 +8,114 @@ import reducer from '../../reducers/demo';
 import Color from '../../style/Color';
 import { connect } from 'react-redux'
 class UserHome extends React.Component{
-
   static navigationOptions = {
     header: null,
     title: '我的',
     tabBarIcon: ({focused, tintColor}) => {
       // const iconName = focused ? '' : 'faxian'
-      return <Iconfont name='weibiaoti2fuzhi12' size={24} color={tintColor} />
+      return <Image style={{width:60}} resizeMode="contain" source={ focused ? require("../../../assets/images/menu_my2.png"): require("../../../assets/images/menu_my1.png") }/>
+    }
+  }
+  componentWillMount(){
+    if(!this.props.auth.isLogined){
+      this.props.navigation.navigate('Login')
     }
   }
   toudi = ()=>{
     this.props.navigation.navigate('toudi')
   }
+  toExchange=()=>{
+    this.props.navigation.navigate('Exchange')
+  }
+  toHelp = ()=>{
+    this.props.navigation.navigate('HelpPage')
+  }
+  toQrcode = ()=>{
+    this.props.navigation.navigate('Qrcode')
+  }
+  toInvite = ()=>{
+    this.props.navigation.navigate('Invite')
+  }
+  toabout = ()=>{
+    this.props.navigation.navigate({routeName:'Article',params:{articleId:1,name:'关于我们'}})
+  }
+  toSetting = ()=>{
+    this.props.navigation.navigate('SettingPage')
+  }
   render(){
     const {auth} = this.props
-    console.log(auth)
     return (<Wrapper style={ScopedStyle.container}>
+     <StatusBar
+        animated={true}
+        hidden={true}
+        backgroundColor={'transparent'}
+        translucent={true}
+        barStyle={'dark-content'}
+      />
       <View style={ScopedStyle.head}>
         <View style={ScopedStyle.avatar}>
-          <Iconfont size={70} name='nanzhi'></Iconfont>
+          <Image source={require('../../../assets/images/avatar.png')} style={{width:80,height:80}}/>
         </View>
         <View style={ScopedStyle.userInfo}>
-          <Text style={{color:Color.white,fontSize:20,fontWeight:'bold',lineHeight:50}}>{auth.username}</Text>
+          <Text style={{color:Color.white,fontSize:20,fontWeight:'bold',lineHeight:30}}>{auth.nickname}</Text>
           <Text style={{color:Color.white}}>{auth.phone}</Text>
         </View>
-        <View style={ScopedStyle.qrcode}>
-          <Iconfont name='erweima' size={70} color={Color.white}></Iconfont>
-        </View>
+        <TouchableOpacity onPress={()=>{this.toQrcode()}} style={ScopedStyle.qrcode}>
+          <Iconfont name='erweima' size={50} color={Color.white}></Iconfont>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={ScopedStyle.listItem}>
+      <TouchableOpacity activeOpacity={0.8} onPress={()=>this.toInvite()} style={ScopedStyle.listItem}>
         <View Style={ScopedStyle.listIcon}>
-          <Iconfont  size={30} color="#128bd6" name="yaoqing"></Iconfont>
+          <Iconfont  size={20} color="#3db0ff" name="yaoqing"></Iconfont>
         </View>
         <Text style={ScopedStyle.listTitle}>我的邀请</Text>
         <View>
-          <Iconfont size={30} color='#cecece' name='you-jiantou'></Iconfont>
+          <Iconfont size={20} color='#cecece' name='youjiantou'></Iconfont>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity style={ScopedStyle.listItem} onPress = {()=>this.toudi()}>
+      <TouchableOpacity activeOpacity={0.8} style={ScopedStyle.listItem} onPress = {()=>this.toudi()}>
         <View Style={ScopedStyle.listIcon}>
-          <Iconfont  size={30} color="#128bd6" name="hezichengxu"></Iconfont>
+          <Iconfont  size={20} color="#3db0ff" name="hezichengxu"></Iconfont>
         </View>
         <Text style={ScopedStyle.listTitle}>我的投递</Text>
         <View>
-          <Iconfont size={30} color='#cecece' name='you-jiantou'></Iconfont>
+          <Iconfont size={20} color='#cecece' name='youjiantou'></Iconfont>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity style={ScopedStyle.listItem}>
+      <TouchableOpacity activeOpacity={0.8} onPress = {()=>this.toExchange()} style={ScopedStyle.listItem}>
         <View Style={ScopedStyle.listIcon}>
-          <Iconfont  size={30} color="#128bd6" name="jifen"></Iconfont>
+          <Iconfont  size={20} color="#3db0ff" name="jifen"></Iconfont>
         </View>
         <Text style={ScopedStyle.listTitle}>我的积分</Text>
         <View>
-          <Iconfont size={30} color='#cecece' name='you-jiantou'></Iconfont>
+          <Iconfont size={20} color='#cecece' name='youjiantou'></Iconfont>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity style={ScopedStyle.listItem}>
+      <TouchableOpacity  activeOpacity={0.8} onPress={()=>this.toHelp()}  style={ScopedStyle.listItem}>
         <View Style={ScopedStyle.listIcon}>
-          <Iconfont  size={30} color="#128bd6" name="jiufuqianbaoicon09"></Iconfont>
+          <Iconfont  size={20} color="#3db0ff" name="jiufuqianbaoicon09"></Iconfont>
         </View>
         <Text style={ScopedStyle.listTitle}>帮助中心</Text>
         <View>
-          <Iconfont size={30} color='#cecece' name='you-jiantou'></Iconfont>
+          <Iconfont size={20} color='#cecece' name='youjiantou'></Iconfont>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity style={ScopedStyle.listItem}>
+      <TouchableOpacity  activeOpacity={0.8} onPress = {()=>{this.toSetting()}} style={ScopedStyle.listItem}>
         <View Style={ScopedStyle.listIcon}>
-          <Iconfont  size={30} color="#128bd6" name="xitongshezhi"></Iconfont>
+          <Iconfont  size={20} color="#3db0ff" name="xitongshezhi"></Iconfont>
         </View>
         <Text style={ScopedStyle.listTitle}>系统设置</Text>
         <View>
-          <Iconfont size={30} color='#cecece' name='you-jiantou'></Iconfont>
+          <Iconfont size={20} color='#cecece' name='youjiantou'></Iconfont>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity style={ScopedStyle.listItem}>
+      <TouchableOpacity activeOpacity={0.8} onPress = {()=>this.toabout()} style={ScopedStyle.listItem}>
         <View Style={ScopedStyle.listIcon}>
-          <Iconfont  size={30} color="#128bd6" name="guanyuwomen"></Iconfont>
+          <Iconfont  size={20} color="#3db0ff" name="guanyuwomen"></Iconfont>
         </View>
         <Text style={ScopedStyle.listTitle}>关于我们</Text>
         <View>
-          <Iconfont size={30} color='#cecece' name='you-jiantou'></Iconfont>
+          <Iconfont size={20} color='#cecece' name='youjiantou'></Iconfont>
         </View>
       </TouchableOpacity>
 
@@ -120,25 +148,27 @@ const ScopedStyle = StyleSheet.create({
 
   },
   listTitle:{
-    fontSize:26,
-    fontWeight:'500',
+    fontSize:18,
+    fontWeight:'300',
     flex:1,
     paddingLeft:20
   },
   head:{
-    backgroundColor:"#128bd6",
+    backgroundColor:"#3db0ff",
     display:'flex',
     flexDirection:'row',
     alignItems:'center',
     paddingLeft:20,
     paddingRight:20,
-    paddingTop:30,
-    paddingBottom:30
+    paddingTop:20,
+    paddingBottom:10,
+    height:150
   },
   avatar:{
-    height:90,
-    width:90,
-    borderRadius:45,
+    height:60,
+    width:60,
+    overflow:'hidden',
+    borderRadius:30,
     backgroundColor:Color.white,
     display:'flex',
     justifyContent:'center',
@@ -146,7 +176,7 @@ const ScopedStyle = StyleSheet.create({
   },
   userInfo:{
     flex:1,
-    padding:20
+    paddingLeft:10
   },
   qrcode:{
     display:'flex',

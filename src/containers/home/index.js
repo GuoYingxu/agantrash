@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text,Image,StyleSheet,View,TouchableOpacity} from 'react-native'
+import {ScrollView,Text,Image,StyleSheet,View,TouchableOpacity,StatusBar,Dimensions} from 'react-native'
 import Iconfont from '../../components/iconfont'
 import Wrapper from '../../components/wrapper';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
@@ -7,57 +7,164 @@ import Style  from '../../style/Style'
 import reducer from '../../reducers/demo';
 import Color from '../../style/Color';
 import { connect } from 'react-redux'
+import Carousel from 'react-native-snap-carousel'
 import * as AuthActionCreators from '../../actions/auth'
 import * as RecordActionCreators from '../../actions/record'
 import * as GarbageActionCreators from '../../actions/garbage'
 import { bindActionCreators } from 'redux';
+const { width, height } = Dimensions.get('window')
+ 
+// const carouselHeight = carouselWidth*carouselRati
 class Home extends React.Component{
 
   static navigationOptions = {
     header: null,
-    title: '首页',
+     title: '',
     tabBarIcon: ({focused, tintColor}) => {
       // const iconName = focused ? '' : 'faxian'
-      return <Iconfont name='shouye' size={24} color={tintColor} />
+      return <Image style={{width:60}} resizeMode="contain" source={ focused ? require("../../../assets/images/menu_index2.png"): require("../../../assets/images/menu_index1.png") }/>
+      // return <Iconfont name='shouye' size={24} color={tintColor} />
     }
   }
   showQrcode= ()=>{
-    this.props.navigation.navigate('Qrcode')
+    if(this.props.auth.isLogined){
+      this.props.navigation.navigate('Qrcode')
+    }else{
+      this.props.navigation.navigate('Login')
+    }
   }
   componentWillMount(){
-    this.props.getGarbageClass()
-    this.props.getRecord()
+    this.props.checkLoginState()
+    console.log(this.props.auth.isLogined)
+    // if(this.props.auth.isLogined){
+    //   this.props.getGarbageClass()
+    //   this.props.getRecord()
+    // }
+  }
+  componentWillReceiveProps(nextProps){
+    console.log('-------------willreceive')
+    if(this.props.auth.isLogined == false && nextProps.auth.isLogined == true ){
+      this.props.getGarbageClass()
+      this.props.getRecord()
+    }
+  }
+  toGuid = ()=>{
+    this.props.navigation.navigate('GuidPage')
+  }
+  toGarbage = ()=>{
+    this.props.navigation.navigate('Garbage')
+  }
+  toYq = ()=>{
+    this.props.navigation.navigate('Yq')
+  }
+  renderPage = (item,index)=>{
+    console.log(item,index)
+    if(item==1){
+
+      return <View>
+      <Image style={ScopedStyle.headImage} source = {require('../../../assets/images/hd1.png')}></Image>
+    </View>
+    }
+    if(item==2){
+
+      return <View>
+      <Image style={ScopedStyle.headImage} source = {require('../../../assets/images/hd2.png')}></Image>
+    </View>
+    }
+    if(item==3){
+
+      return <View>
+      <Image style={ScopedStyle.headImage} source = {require('../../../assets/images/hd3.png')}></Image>
+    </View>
+    }
+//    return  <View  >
+//     <Text  >{ item.url }</Text>
+// </View>
+      // return <Image style={ScopedStyle.headImage}  source={{uri:item.url}} resizeMode="cover"  />
+  }
+  onSnapToItem = (index) => {
+    // if(this.pageDots) {
+    //   this.pageDots.setPagination(index)
+    // }
   }
   render(){
     const {auth,record} = this.props
+  //   const  data = [{url:'https://basecdn.aganjinrong.com/FmCteVYTHO4KmHZlbssxac51PuKI'},
+  //   {url:'https://basecdn.aganjinrong.com/FgxfeMfqYzgdFDKnh8KjBOQnu32y'},
+  //   {url:'https://basecdn.aganjinrong.com/FljRVmxXHsbENzGXDY9fe76bGpzI'}
+  // ]a
+    const data = [1,2,3]
     return (
       <Wrapper style ={ScopedStyle.container}>
-        <View style={ScopedStyle.head}>
-          <Image style={ScopedStyle.headImage}  source={require('../../../assets/images/head.png')} resizeMode="cover"  />
+        <StatusBar
+          animated={true}
+          hidden={true}
+          backgroundColor={'transparent'}
+          translucent={true}
+          barStyle={'dark-content'}
+        />
+        
+        <View style= {ScopedStyle.head}> 
+          <View style={ScopedStyle.headIcon}>
+            <Image style={{width:40,height:40}} source = {require('../../../assets/images/logo_w.png')}></Image>
+          </View>
+          <View style= {ScopedStyle.headTitle}>
+            <Text style={{fontSize:18,color:Color.white}}>智能垃圾回收平台</Text>
+          </View>
+          <View style={ScopedStyle.headMessage}>
+            <Iconfont name='tongzhi' size={30} color={Color.white}></Iconfont>
+          </View>
+        </View>
+        <ScrollView horizontal={false}>
+        <View style={ScopedStyle.banner}>
+          <Carousel
+                data={data}
+                autoplay={true}
+                autoplayDelay={1000}
+                autoplayInterval={3000}
+                loop={true}
+                renderItem={({item, index})=>this.renderPage(item,index)}
+                sliderWidth={width}
+                itemWidth={width}
+                inactiveSlideScale={1}
+                lockScrollWhileSnapping={true}
+                inactiveSlideOpacity={1}
+                firstItem={0}
+                // enableMomentum={false}
+                // activeSlideOffset={100}
+                // onSnapToItem={this.onSnapToItem.bind(this)}
+              />
+              {/* <PaginationDots ref={(r) => this.pageDots = r} carouselData={data} /> */}
+          {/* <Image style={ScopedStyle.headImage}  source={require('../../../assets/images/head1.png')} resizeMode="cover"  /> */}
         </View>
         <View style={ScopedStyle.funcContainer}>
           <View style={ScopedStyle.func}>
-            <View style={[ScopedStyle.funcIcon,ScopedStyle.ColorOrange]}>
-              <Iconfont name='fenlei' size={30} color={Color.white}></Iconfont>
-            </View>
+            <TouchableOpacity style={[ScopedStyle.funcIcon,ScopedStyle.ColorOrange]}  activeOpacity={1}  onPress= {()=>{
+          this.toGarbage()
+        }}>
+              {/* <Iconfont name='fenlei' size={24} color={Color.white}></Iconfont> */}
+              <Image style={{width:30,height:30}} source={require('../../../assets/images/garbageclass.png')} resizeMode='cover'/>
+            </TouchableOpacity>
             <View  style={ScopedStyle.iconTitle}><Text>回收分类</Text></View>
           </View>
-          <View style={ScopedStyle.func}>
-            <View style={[ScopedStyle.funcIcon,ScopedStyle.ColorBlue2]}>
-              <Iconfont name='liwuhuodong' size={30} color={Color.white}></Iconfont>
-            </View>
+          <View  style={ScopedStyle.func}>
+            <TouchableOpacity activeOpacity= {1} onPress={()=>this.toYq()} style={[ScopedStyle.funcIcon,ScopedStyle.ColorBlue2]}>
+            <Image style={{width:30,height:30}} source={require('../../../assets/images/invite.png')} resizeMode='cover'/>
+            </TouchableOpacity>
             <View  style={ScopedStyle.iconTitle}><Text>邀请有礼</Text></View>
           </View>
           <View style={ScopedStyle.func}>
-            <View style={[ScopedStyle.funcIcon,ScopedStyle.ColorGreen]}>
-              <Iconfont name='iconset0119' size={30} color={Color.white}></Iconfont>
-            </View>
+            <TouchableOpacity activeOpacity = {1}  onPress={()=>{this.toGuid()}}  style={[ScopedStyle.funcIcon,ScopedStyle.ColorGreen]}>
+            <Image style={{width:30,height:30}} source={require('../../../assets/images/helpinfo.png')} resizeMode='cover'/>
+            </TouchableOpacity>
             <View style={ScopedStyle.iconTitle}><Text class={ScopedStyle.iconText}>入门指南</Text></View>
           </View>
         </View>
         <View style={ScopedStyle.bbTitle}>
           <View style={ScopedStyle.line}></View>
-          <View style = {ScopedStyle.bigTitle}><Text style={{fontSize:20,textAlign:'center'}}>我的投递</Text></View>
+          <View style = {ScopedStyle.bigTitle}>
+            <Text style={{fontSize:18,textAlign:'center'}}>我的投递</Text>
+          </View>
           <View style={ScopedStyle.line}></View>
         </View>
         <View style={ScopedStyle.scoreContainer}>
@@ -66,24 +173,25 @@ class Home extends React.Component{
             <View style={ScopedStyle.scoreTitle}><Text style={ScopedStyle.scoreTitleText}>当前积分</Text></View>
           </View>
           <View style={ScopedStyle.score}>
-            <View style={ScopedStyle.scoreValue}><Text style={ScopedStyle.scoreValueText}>{record.total}</Text></View>
+            <View style={ScopedStyle.scoreValue}><Text style={ScopedStyle.scoreValueText}>{record.total||0}</Text></View>
             <View style={ScopedStyle.scoreTitle}><Text style={ScopedStyle.scoreTitleText}>投递次数</Text></View>
           </View>
         </View>
-        <TouchableOpacity style={ScopedStyle.qrcodeContainer} onPress={()=>this.showQrcode()}>
-          <View style={ScopedStyle.qrcode}>
+        <View style={ScopedStyle.qrcodeContainer} >
+          <TouchableOpacity style={ScopedStyle.qrcode} activeOpacity = {1}  onPress={()=>this.showQrcode()}>
             <Iconfont name='erweima' color="#91d64b" size={80}></Iconfont>
-          </View>
-          <View style={ScopedStyle.qrinfoCon}>
-            <Text style={{fontSize:20,fontWeight:'bold',lineHeight:24}}>我的二维码</Text>
-            <Text>1.打开二维码</Text>
-            <Text>2.放入智能垃圾箱扫描设备</Text>
-            <Text>3.开箱投递垃圾</Text>
-          </View>
-          <View style={ScopedStyle.rightRow}>
-            <Iconfont name='you-jiantou' color="#91d64b" size = {80}></Iconfont>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+          <TouchableOpacity style={ScopedStyle.qrinfoCon} activeOpacity = {1}  onPress={()=>this.showQrcode()}>
+            <Text style={{fontSize:18,fontWeight:'bold',lineHeight:24}}>我的二维码</Text>
+            <Text style={{fontSize:12,lineHeight:20}}>1.打开二维码</Text>
+            <Text style={{fontSize:12,lineHeight:20}}>2.放入智能垃圾箱扫描设备</Text>
+            <Text style={{fontSize:12,lineHeight:20}}>3.开箱投递垃圾</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={ScopedStyle.rightRow} activeOpacity = {1}   onPress={()=>this.showQrcode()}>
+            <Iconfont name='iconfontjiantou3' color="#91d64b" size = {40}></Iconfont>
+          </TouchableOpacity>
+        </View>
+        </ScrollView>
       </Wrapper>
     )
   }
@@ -106,20 +214,24 @@ const ScopedStyle = StyleSheet.create({
     flexDirection:'row',
     backgroundColor:"#f2f2f2",
     padding:20,
+    marginTop:20,
+    // marginTop:10,
+    alignItems:'center'
   },
   qrcode:{
-    flex:1
   },
   qrinfoCon:{
-    
+    flex:1,
+    paddingLeft:20 
   },
   rightRow:{
-
+    marginLeft:10
   },
   scoreContainer:{
     display:'flex',
     flexDirection:'row',
-    padding:10
+    paddingTop:15,
+    paddingBottom:15
   },
   score:{
     flex:1
@@ -128,12 +240,15 @@ const ScopedStyle = StyleSheet.create({
     
   },
   scoreValueText:{
-    fontSize:40,
+    fontSize:30,
     textAlign:'center',
     fontWeight:'bold'
   },
+  scoreTitle:{
+    marginTop:10
+  },
   scoreTitleText:{
-    fontSize:20,
+    fontSize:18,
     textAlign:'center'
   },
   container: {
@@ -151,13 +266,14 @@ const ScopedStyle = StyleSheet.create({
     backgroundColor:Color.white,
     flex:1,
     textAlign:'center',
-    padding:20,
+    paddingTop:20,
+    paddingBottom:20,
     alignItems:'center'
   },
   funcIcon:{
-    width:80,
-    height:80,
-    borderRadius:40,
+    width:60,
+    height:60,
+    borderRadius:30,
     display:'flex',
     justifyContent:'center',
     alignItems:'center'
@@ -167,7 +283,7 @@ const ScopedStyle = StyleSheet.create({
     textAlign:'center',
   },
   iconText:{
-    fontSize:40,
+    fontSize:30,
 
   },
   ColorOrange:{
@@ -180,12 +296,29 @@ const ScopedStyle = StyleSheet.create({
     backgroundColor:"#73bc2c"
   },
   head:{
+    height:50  ,
+    backgroundColor:'#3db0ff' ,
+    display:'flex',
+    flexDirection:'row',
+    alignItems:'center'
+  },
+  headerIcon:{
+    width:80
+  },
+  headTitle:{
+    flex:1
+  },
+  headerMessage:{
+    width:100,
+    paddingRight:20
+  },
+  banner:{
     width:'100%',
-    height:'30%',
+    height: Math.floor(width*9/16),
     position:'relative'
   },
   headImage:{
-    height:'100%',
+    height: Math.floor(width*9/16),
     width:'100%'
   },
   test:{
@@ -202,10 +335,10 @@ const ScopedStyle = StyleSheet.create({
   line:{
     flex:1,
     height:1,
-    borderTopWidth:2,
+    borderTopWidth:1,
     borderStyle:'solid',
-    borderTopColor:Color.b_gray,
-    margin:20,
+    borderTopColor:"#e4e4e4",
+    margin:10,
   },
   bigTitle:{
     flex:1
