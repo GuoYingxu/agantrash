@@ -41,6 +41,7 @@
     "redux": "latest",
     "redux-logger": "latest",
     "redux-thunk": "latest",
+    "rn-fetch-blob": "^0.10.15",
     "sane": "^4.1.0"
   },
   "devDependencies": {

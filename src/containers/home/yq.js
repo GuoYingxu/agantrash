@@ -1,7 +1,7 @@
 import React from 'react'
 import Wrapper from '../../components/wrapper';
 import {connect} from 'react-redux'
-import {View ,Text,StyleSheet ,StatusBar} from 'react-native'
+import {View ,Image,StyleSheet ,StatusBar} from 'react-native'
 import Color from '../../../config/color';
 import Header from '../../components/trashHeader'
 
@@ -22,6 +22,7 @@ class Yq extends React.Component{
   //   }
   // }
   render(){
+    
     return (<Wrapper>
    <StatusBar
         animated={true}
@@ -30,10 +31,9 @@ class Yq extends React.Component{
         translucent={true}
         barStyle={'dark-content'}
       />
-      <Header title= '邀请有礼'></Header>
-      <View>
-        <Text style={{textAlign:'center',fontSize:14,lineHeight:60}}>详细内容</Text>
-      </View>
+      <Header title= '邀请有礼'></Header> 
+        <Image resizeMode='stretch'  style={{flex:1,width:'100%'}}    source ={require('../../../assets/images/222.png')}></Image>
+      
     </Wrapper>)
   }
 }

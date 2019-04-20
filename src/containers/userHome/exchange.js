@@ -35,7 +35,7 @@ class ExChange extends React.Component{
     }
   }
   render(){
-    const {exchange}  = this.props;
+    const {exchange,auth}  = this.props;
     return (<Wrapper>
    <StatusBar
         animated={true}
@@ -50,7 +50,7 @@ class ExChange extends React.Component{
           <Iconfont name='jifen' size={40} color={Color.white}></Iconfont>
         </View>
         <View style={{paddingLeft:10}}>
-          <Text style={{color:Color.white,fontSize:20}}>120</Text>
+          <Text style={{color:Color.white,fontSize:20}}>{auth&& auth.userInfo && auth.userInfo.poits || 0}</Text>
           <Text style={{color:Color.white}}>当前积分</Text>
         </View>
       </View>
@@ -80,6 +80,7 @@ class ExChange extends React.Component{
 const mapStateToProps = (state) => {
   return {
     exchange:state.exchange,
+    auth: state.auth
   }
 }
 const  mapDispatchToProps = (dispatch)=>{

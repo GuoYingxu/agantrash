@@ -17,9 +17,19 @@ class UserHome extends React.Component{
     }
   }
   componentWillMount(){
-    if(!this.props.auth.isLogined){
-      this.props.navigation.navigate('Login')
+    console.log('willMount')
+    // if(!this.props.auth.isLogined){
+    //   this.props.navigation.navigate('Login')
+    // }
+  }
+  componentWillReceiveProps(nextProps){
+    console.log('willrecive')
+    if(nextProps.auth.isLogined){
+      //this.props.navigation.n
     }
+  }
+  componentDidMount(){
+    console.log('----didmount')
   }
   toudi = ()=>{
     this.props.navigation.navigate('toudi')
@@ -42,7 +52,13 @@ class UserHome extends React.Component{
   toSetting = ()=>{
     this.props.navigation.navigate('SettingPage')
   }
+  torename = ()=>{
+    this.props.navigation.navigate('RenamePage')
+  }
   render(){
+    if(!this.props.auth.isLogined){
+      this.props.navigation.navigate('Login')
+    }
     const {auth} = this.props
     return (<Wrapper style={ScopedStyle.container}>
      <StatusBar
@@ -56,10 +72,10 @@ class UserHome extends React.Component{
         <View style={ScopedStyle.avatar}>
           <Image source={require('../../../assets/images/avatar.png')} style={{width:80,height:80}}/>
         </View>
-        <View style={ScopedStyle.userInfo}>
+        <TouchableOpacity style={ScopedStyle.userInfo} activeOpacity = {0.9} onPress = {()=>this.torename()}>
           <Text style={{color:Color.white,fontSize:20,fontWeight:'bold',lineHeight:30}}>{auth.nickname}</Text>
           <Text style={{color:Color.white}}>{auth.phone}</Text>
-        </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={()=>{this.toQrcode()}} style={ScopedStyle.qrcode}>
           <Iconfont name='erweima' size={50} color={Color.white}></Iconfont>
         </TouchableOpacity>

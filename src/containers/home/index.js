@@ -35,18 +35,31 @@ class Home extends React.Component{
   }
   componentWillMount(){
     this.props.checkLoginState()
+    this.props.getGarbageClass()
     console.log(this.props.auth.isLogined)
     // if(this.props.auth.isLogined){
     //   this.props.getGarbageClass()
-    //   this.props.getRecord()
+    //  this.props.getRecord()
     // }
   }
   componentWillReceiveProps(nextProps){
-    console.log('-------------willreceive')
-    if(this.props.auth.isLogined == false && nextProps.auth.isLogined == true ){
-      this.props.getGarbageClass()
+    console.log('-------------willreceive', nextProps.auth.isLogined,nextProps.record.loaded)
+    if(nextProps.auth.isLogined == true && nextProps.record.loaded == false){
       this.props.getRecord()
     }
+    // if(this.props.record.total !== nextProps.record.total){
+    //   this.props.getRecord()
+    // }
+    //if(this.props.auth.isLogined == false && nextProps.auth.isLogined == true ){ 
+     // this.props.getRecord()
+    //}
+    
+  }
+  componentWillUpdate(){
+    console.log('----willupdate')
+  }
+  componentDidUpdate(){
+    console.log('----didUpdate')
   }
   toGuid = ()=>{
     this.props.navigation.navigate('GuidPage')

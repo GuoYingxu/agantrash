@@ -2,6 +2,7 @@ import {
   RECORD_UPDATED
 } from '../actions/type'
 const initialState = {
+  loaded:false,
   total:0,
   page:1,
   list:[]

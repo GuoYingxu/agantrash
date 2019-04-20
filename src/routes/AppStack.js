@@ -11,6 +11,8 @@ import Yq from '../containers/home/yq'
 import GuidPage from '../containers/home/guid'
 import ArtPage from '../containers/userHome/article'
 import SettingPage from '../containers/userHome/setting'
+import RenamePage from '../containers/userHome/rename'
+import Nicheng from '../containers/userHome/nicheng'
 const AppStack = createStackNavigator({
   Tab: {
     screen: Tab,
@@ -47,6 +49,12 @@ const AppStack = createStackNavigator({
   },
   SettingPage:{
     screen:SettingPage
+  },
+  RenamePage:{
+    screen:RenamePage
+  },
+  Nicheng:{
+    screen:Nicheng
   }
 })
 

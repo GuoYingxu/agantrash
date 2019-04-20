@@ -17,10 +17,13 @@ class ArtPage extends React.Component{
     title: '文章内容' 
   }
   componentDidMount(){
-    this.props.getArticle(this.props.articleId)
+    if(!this.props.withContent){
+
+      this.props.getArticle(this.props.articleId)
+    }
   }
   render(){
-    const {article} = this.props
+    const {article,withContent,content} = this.props
     return (<Wrapper>
    <StatusBar
         animated={true}
@@ -31,13 +34,20 @@ class ArtPage extends React.Component{
       />
       <Header title= {this.props.name}></Header>
       {
-         article.title ?  (<View>
+        (!withContent && article.title) ?  (<View>
           <Text style={{fontSize:20,color:Color.black,fontWeight:'bold',padding:20,lineHeight:24}}>{article.title}</Text>
           </View>) : <Text></Text>
       }
       {
-        article.content ? (<View style={{paddingHorizontal:20}}><Text style={{fontSize:14,lineHeight:20,color:Color.f_body}}>{article.content}</Text></View>) :
-        <View><Text style={{fontSize:14,textAlign:'center',lineHeight:60}}>正在加载...</Text></View>
+        (!withContent && article.content) ? (<View style={{paddingHorizontal:20}}><Text style={{fontSize:14,lineHeight:20,color:Color.f_body}}>{article.content}</Text></View>) :null
+        
+      }
+       {
+        withContent  ? (<View style={{paddingHorizontal:20}}><Text style={{fontSize:14,lineHeight:20,color:Color.f_body}}>{content || '(管理员偷懒了，还没有编辑该内容...)'}</Text></View>) :null
+        
+      }
+      {
+        (!withContent && !article.content) ? <View><Text style={{fontSize:14,textAlign:'center',lineHeight:60}}>正在加载...</Text></View> : null
       }
     </Wrapper>)
   }
@@ -46,7 +56,9 @@ const mapStateToProps = (state,props) => {
   return {
     articleId: props.navigation.state.params.articleId,
     name:props.navigation.state.params.name,
-    article: state.article
+    article: state.article,
+    withContent: props.navigation.state.params.withContent,
+    content: props.navigation.state.params.content
   }
 }
 const  mapDispatchToProps = (dispatch)=>{

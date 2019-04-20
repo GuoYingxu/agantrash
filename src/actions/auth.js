@@ -1,5 +1,44 @@
-import { USER_UPDATED } from './type';
+import { USER_UPDATED,RECORD_UPDATED,INVITE_UPDATED,EXCHANGE_UPDATED } from './type';
 import { NavigationActions } from 'react-navigation'
+
+export function  changename(name) {
+  return (dispatch,getState) =>{
+    const {auth} = getState()
+    let url = `${host}user-center/customer/updateMe?access_token=${auth.accessToken}`
+    _fetch(url,
+      {
+        method:'POST',
+        body:JSON.stringify({
+          nickname:name 
+        })
+      }).then(res=>{
+        console.log('=========================',res)
+         if(res.success){
+           dispatch({type:USER_UPDATED,data:{nickname:name}})
+           dispatch(NavigationActions.navigate({routeName:'UserHome'}))
+           
+        //   let actiondata = {}
+        //   actiondata.loginKey = res.result.key
+        //  dispatch({type:USER_UPDATED,data:{...actiondata}})
+         }
+      }).catch(er=>{
+        console.log(er)
+      })
+  }
+}
+export function clearSession(){
+  return (dispatch,getState) =>{
+
+    storage.remove({
+      key:'tokenAccess',
+    })
+    dispatch({type:USER_UPDATED,data:{accessToken:'',name:'',isLogined:false,userInfo:null,phone:'',nickname:''}})
+    dispatch({type:RECORD_UPDATED,data:{total:0,list:[],page:1,loaded:false}})
+    dispatch({type:INVITE_UPDATED,data:{total:0,list:[],page:1}})
+    dispatch({type:EXCHANGE_UPDATED,data:{total:0,list:[],page:1}})
+  }
+
+}
 export function checkLoginState(){
   return (dispatch, getState) =>{
     let {auth} = getState()
@@ -13,15 +52,15 @@ export function checkLoginState(){
           token =await refreshToken(token)
           if(token !=null && token.accessToken){
             data = await getUserInfo(token.accessToken)
-            if(data.errorMessages){ //用户不存在
+            if(!data.success){ //用户不存在
               console.log('---tkremove')
               storage.remove({
                 key: 'tokenAccess'
               });
               return 
             }
-          }else{ 
-            return 
+          } else{
+            return
           }
         }
       
@@ -89,14 +128,15 @@ export function sendMsg(phone){
 }
 
 function getUserInfo(token){
+  console.log('getUserInfo')
   const url = `${host}user-center/customer/current?access_token=${token}`
   return _fetch(url,{
     method:'GET'
   }).then(async res=>{  
+    
     console.log('geutuser',res)
     return res
-  }).catch(err=>{
-    
+  }).catch(err=>{ 
     return {
       result:null
     }
@@ -123,10 +163,10 @@ function refreshToken(token){
     return null
   })
 }
-  
-    
+
  
 export function login(phone,code){
+  console.log('=====ohon   code')
   return (dispatch,getState) => {
     const {auth} = getState()
     let url = `${host}sys/login-sms?phone=${phone}&code=${code}&key=${auth.loginKey}`

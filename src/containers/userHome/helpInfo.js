@@ -24,13 +24,13 @@ class HelpPage extends React.Component {
           activeOpacity = { 0.9 }
           style = { ScopedStyle.listItem } >
           <View style = { ScopedStyle.leftCon } >
-          <Text style = { ScopedStyle.garbageClass } > { item.articleTitle } </Text> 
+            <Text style = { ScopedStyle.garbageClass } > { item.articleTitle } </Text> 
           </View> 
           <View >
-          <Iconfont size = { 20 }
-          color = '#cecece'
+          <Iconfont size = { 20 } color = '#cecece'
           name = 'youjiantou' > </Iconfont> 
-          </View> </TouchableOpacity>)
+          </View> 
+          </TouchableOpacity>)
         }
         onEndReached = () => {
           console.log('endReached')
@@ -40,33 +40,33 @@ class HelpPage extends React.Component {
         }
         render() {
           const { help } = this.props;
-          return ( <Wrapper >
+          return ( <Wrapper>
             <StatusBar animated = { true }
             hidden = { true }
             backgroundColor = { 'transparent' }
             translucent = { true }
             barStyle = { 'dark-content' }
-            /> <Header title = '入门指南' > </Header> 
-            <FlatList extraData = { this.props.help }
-            data = { help.list }
-            renderItem = { this._renderItem }
-            keyExtractor = {
-              (item, index) => 'invite' + item.articleId }
-            enableEmptySections = { true }
-            onEndReached = { this.onEndReached }
-            onEndReachedThreshold = { this.props.onEndReachedThreshold || 0.1 }
-            ListEmptyComponent = {() => <View style = {
-                {
-                  transform: [{ scaleY: this.props.inverted ? -1 : 1 }],
-                  height: 'auto',
-                  width: '100%',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }
-              } > <Text style = {
-                { lineHeight: 80 } } > 没有数据! </Text>{/ * 通过transform scaleY抵消RN0 .57 .1 新出现的bug * /}</View >
+            /> 
+              <Header title = '入门指南' > </Header> 
+              <FlatList extraData = { this.props.help }
+                data = { help.list }
+                renderItem = { this._renderItem }
+                keyExtractor = {(item, index) => 'invite' + item.articleId }
+                enableEmptySections = { true }
+                onEndReached = { this.onEndReached }
+                onEndReachedThreshold = { this.props.onEndReachedThreshold || 0.1 }
+                ListEmptyComponent = {() => <View style = {{
+                    transform: [{ scaleY: this.props.inverted ? -1 : 1 }],
+                    height: 'auto',
+                    width: '100%',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }} > 
+                <Text style = {{ lineHeight: 80 } } > 没有数据! </Text> 
+              </View >
             } >
-            </FlatList> </Wrapper>)
+            </FlatList> 
+          </Wrapper>)
           }
         }
         const mapStateToProps = (state) => {

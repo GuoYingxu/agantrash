@@ -7,6 +7,7 @@ import Iconfont from '../../components/iconfont'
 import Header from '../../components/trashHeader'
 import {bindActionCreators} from 'redux'
 import * as GuidActionCreator from '../../actions/guid'
+import * as AuthActionCreator from '../../actions/auth'
 class SettingPage extends React.Component{
 
   static navigationOptions = { 
@@ -16,11 +17,13 @@ class SettingPage extends React.Component{
   toInfo = (id)=>{
     this.props.navigation.navigate({routeName:'Article',params:{articleId:id,name:'注册协议'}})
   }
+  rename = ()=>{
+    this.props.navigation.navigate({routeName:'RenamePage'})
+  }
   toQuit =(id)=>{
-    storage.remove({
-      key:'tokenAccess',
-    })
-    this.props.navigation.navigate('App')
+   
+    this.props.navigation.navigate('Home')
+    this.props.clearSession()
   }
   render(){ 
     return (<Wrapper>
@@ -32,6 +35,16 @@ class SettingPage extends React.Component{
         barStyle={'dark-content'}
       />
       <Header title= '系统设置'></Header>
+      <TouchableOpacity   activeOpacity = {0.9} style={ScopedStyle.listItem} onPress = {()=>{
+        this.rename()
+      }} >
+        <View style={ScopedStyle.leftCon}>
+            <Text style={ScopedStyle.garbageClass}>用户资料修改</Text>
+        </View>
+        <View>
+          <Iconfont size={20} color='#cecece' name='youjiantou'></Iconfont>
+        </View>
+      </TouchableOpacity>
       <TouchableOpacity onPress={()=>this.toInfo(2)} activeOpacity = {0.9} style={ScopedStyle.listItem} >
         <View style={ScopedStyle.leftCon}>
             <Text style={ScopedStyle.garbageClass}>注册协议</Text>
@@ -48,6 +61,7 @@ class SettingPage extends React.Component{
           <Iconfont size={20} color='#cecece' name='youjiantou'></Iconfont>
         </View>
       </TouchableOpacity>
+      
       <View style={{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'center',marginTop:30}}> 
         <TouchableOpacity activeOpacity = {0.9} onPress={()=>{this.toQuit()}} style={[ScopedStyle.sendMsgBtn,{borderColor: "#3db0ff" ,backgroundColor:  "#3db0ff"  }]}>
           <Text style={{color: Color.white,fontSize:20,textAlign:'center'}}> 退出登录</Text>
@@ -63,7 +77,7 @@ const mapStateToProps = (state) => {
   }
 }
 const  mapDispatchToProps = (dispatch)=>{
-  return bindActionCreators({...GuidActionCreator},dispatch)
+  return bindActionCreators({...GuidActionCreator,...AuthActionCreator},dispatch)
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(SettingPage)

@@ -16,7 +16,8 @@ export function getRecord(page){
         data:{
           page:page,
           total:res.totalRecord,
-          list: page == 1 ? res.records : [...record.list,...res.records]
+          list: page == 1 ? res.records : [...record.list,...res.records],
+          loaded:true
         }})
       }
     })
