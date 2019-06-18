@@ -2,22 +2,25 @@ import { GUID_UPDATED, HELP_UPDATED, ARTICLE_UPDATED } from './type'
 export function getGuid(page) {
   return (dispatch, getState) => {
     let { guid, auth } = getState()
+    let  p = page || 1
     const url = `${host}collect/article/queryArticleList`
     _fetch(url, {
       method: 'POST',
       body: JSON.stringify({
-        currenPage: page || 1,
+        currentPage: p,
         pageSize: 30,
-        typeCode: 'type_code_003'
+        moreAttrs:{
+          typeCode: 'type_code_003'
+        }
       })
     }).then(res => {
       if (res.success == true || res.success == 'true') {
         dispatch({
           type: GUID_UPDATED,
           data: {
-            page: page,
+            page: p,
             total: res.totalRecord,
-            list: page == 1 ? res.records : [...guid.list, ...res.records]
+            list: p.toString() == '1' ? res.records : [...guid.list, ...res.records]
           }
         })
       }
@@ -28,22 +31,25 @@ export function getGuid(page) {
 export function getHelp(page) {
   return (dispatch, getState) => {
     let { help, auth } = getState()
+    let p = page || 1
     const url = `${host}collect/article/queryArticleList`
     _fetch(url, {
       method: 'POST',
       body: JSON.stringify({
-        currenPage: page || 1,
+        currentPage: p ,
         pageSize: 30,
-        typeCode: 'type_code_002'
+        moreAttrs:{
+          typeCode: 'type_code_002'
+        }
       })
     }).then(res => {
       if (res.success == true || res.success == 'true') {
         dispatch({
           type: HELP_UPDATED,
           data: {
-            page: page,
+            page: p,
             total: res.totalRecord,
-            list: page == 1 ? res.records : [...help.list, ...res.records]
+            list: p.toString() == '1' ? res.records : [...help.list, ...res.records]
           }
         })
       }

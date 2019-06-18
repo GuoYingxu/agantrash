@@ -75,6 +75,7 @@ export function checkLoginState(){
             userInfo:userInfo,
             phone:userInfo && userInfo.phone,
             nickname:userInfo && userInfo.nickname || '您的昵称',
+            id:userInfo.customerId,
             isLogined:true
           }})
           storage.save({
@@ -126,7 +127,27 @@ export function sendMsg(phone){
       })
   }
 }
-
+export function freshpoints(){
+  return (dispatch,getState) =>{
+    let {auth } =getState()
+    const url = `${host}user-center/customer/current?access_token=${auth.accessToken}`
+    return _fetch(url,{
+      method:'GET'
+    }).then(async res=>{   
+      //return res
+      if(res.result){
+        const userInfo = res.result
+        dispatch({type:USER_UPDATED,data:{ 
+          userInfo:userInfo
+        }})
+      }
+    }).catch(err=>{ 
+      return {
+        result:null
+      }
+    })
+  }
+}
 function getUserInfo(token){
   console.log('getUserInfo')
   const url = `${host}user-center/customer/current?access_token=${token}`
@@ -165,8 +186,7 @@ function refreshToken(token){
 }
 
  
-export function login(phone,code){
-  console.log('=====ohon   code')
+export function login(phone,code){ 
   return (dispatch,getState) => {
     const {auth} = getState()
     let url = `${host}sys/login-sms?phone=${phone}&code=${code}&key=${auth.loginKey}`
@@ -186,7 +206,8 @@ export function login(phone,code){
             userInfo:userInfo,
             phone:userInfo && userInfo.phone,
             nickname:userInfo && userInfo.nickname || '您的昵称',
-            isLogined:true
+            isLogined:true,
+            id:userInfo.customerId
           }})
 
           storage.save({

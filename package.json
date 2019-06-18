@@ -19,9 +19,10 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "latest",
-    "@react-native-community/netinfo": "latest",
+    "@react-native-community/netinfo": "^3.1.0",
     "axios": "^0.18.0",
     "babel-preset-react-native": "^4.0.1",
+    "buffer": "^5.2.1",
     "color": "^3.1.0",
     "lodash": "latest",
     "metro": "^0.53.1",

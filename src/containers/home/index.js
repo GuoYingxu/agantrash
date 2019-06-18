@@ -35,31 +35,33 @@ class Home extends React.Component{
   }
   componentWillMount(){
     this.props.checkLoginState()
-    this.props.getGarbageClass()
-    console.log(this.props.auth.isLogined)
-    // if(this.props.auth.isLogined){
-    //   this.props.getGarbageClass()
-    //  this.props.getRecord()
-    // }
+    this.props.getGarbageClass() 
   }
   componentWillReceiveProps(nextProps){
-    console.log('-------------willreceive', nextProps.auth.isLogined,nextProps.record.loaded)
+    console.log('-------------willreceive', this.props.navigation.isFocused())
     if(nextProps.auth.isLogined == true && nextProps.record.loaded == false){
       this.props.getRecord()
-    }
-    // if(this.props.record.total !== nextProps.record.total){
-    //   this.props.getRecord()
-    // }
-    //if(this.props.auth.isLogined == false && nextProps.auth.isLogined == true ){ 
-     // this.props.getRecord()
-    //}
-    
+      this.props.freshpoints()
+    } 
+  }
+  componentDidMount(){
+    this._didFocusSubscription = this.props.navigation.addListener('didFocus', payload =>{
+      //console.log(payload)
+      if(this.props.auth.isLogined){
+        this.props.getRecord()
+        this.props.freshpoints()
+      }
+    });
+    console.log('---didmount',this.props.navigation.isFocused())
+  }
+  componentWillUnmount(){
+    this._didFocusSubscription && this._didFocusSubscription.remove();
   }
   componentWillUpdate(){
-    console.log('----willupdate')
+    console.log('----willupdate',this.props.navigation.isFocused())
   }
   componentDidUpdate(){
-    console.log('----didUpdate')
+    console.log('----didUpdate',this.props.navigation.isFocused())
   }
   toGuid = ()=>{
     this.props.navigation.navigate('GuidPage')
@@ -71,9 +73,8 @@ class Home extends React.Component{
     this.props.navigation.navigate('Yq')
   }
   renderPage = (item,index)=>{
-    console.log(item,index)
-    if(item==1){
-
+    //console.log(item,index)
+    if(item==1){ 
       return <View>
       <Image style={ScopedStyle.headImage} source = {require('../../../assets/images/hd1.png')}></Image>
     </View>
@@ -210,10 +211,11 @@ class Home extends React.Component{
   }
 }
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state,props)=>{
   return {
     auth:state.auth,
-    record:state.record
+    record:state.record,
+    //isFocus: props.navigation.isFocused
   }
 }
 const mapDispatchToProps = (dispatch)=>{

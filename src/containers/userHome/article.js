@@ -7,6 +7,7 @@ import Iconfont from '../../components/iconfont'
 import Header from '../../components/trashHeader'
 import {bindActionCreators} from 'redux'
 import * as GuidActionCreator from '../../actions/guid'
+import { ScrollView } from 'react-native-gesture-handler';
 class ArtPage extends React.Component{
   constructor(props){
     super(props)
@@ -33,6 +34,7 @@ class ArtPage extends React.Component{
         barStyle={'dark-content'}
       />
       <Header title= {this.props.name}></Header>
+      <ScrollView>
       {
         (!withContent && article.title) ?  (<View>
           <Text style={{fontSize:20,color:Color.black,fontWeight:'bold',padding:20,lineHeight:24}}>{article.title}</Text>
@@ -48,7 +50,8 @@ class ArtPage extends React.Component{
       }
       {
         (!withContent && !article.content) ? <View><Text style={{fontSize:14,textAlign:'center',lineHeight:60}}>正在加载...</Text></View> : null
-      }
+      } 
+      </ScrollView>
     </Wrapper>)
   }
 }

@@ -35,7 +35,7 @@ class HelpPage extends React.Component {
         onEndReached = () => {
           console.log('endReached')
           if (this.props.help.total > this.props.help.list.length) {
-            this.props.getGuid(this.props.help.page + 1)
+            this.props.getHelp(this.props.help.page + 1)
           }
         }
         render() {
@@ -47,7 +47,7 @@ class HelpPage extends React.Component {
             translucent = { true }
             barStyle = { 'dark-content' }
             /> 
-              <Header title = '入门指南' > </Header> 
+              <Header title = '帮助中心' > </Header> 
               <FlatList extraData = { this.props.help }
                 data = { help.list }
                 renderItem = { this._renderItem }

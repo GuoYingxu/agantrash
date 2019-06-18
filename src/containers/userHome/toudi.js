@@ -17,8 +17,8 @@ class Toudi extends React.Component{
   _renderItem = ({item})=>{
     return (<View style={ScopedStyle.listItem} >
     <View style={ScopedStyle.leftCon}>
-        <Text style={ScopedStyle.garbageClass}>{  item.garbageTypeName}</Text>
-        <Text style = {ScopedStyle.time}>{formartDate(item.deliveryTime)}</Text>
+        <Text style={ScopedStyle.garbageClass}>{  item.garbageTypeName+'('+item.weight+'克)'}</Text>
+        <Text style = {ScopedStyle.time}>{item.deliveryTimeStr}</Text>
     </View>
     <View style={ScopedStyle.rightCon}>
       <Text style={ScopedStyle.score}>+{item.rewardsPoints}</Text>
@@ -28,8 +28,12 @@ class Toudi extends React.Component{
   onEndReached= ()=>{
     console.log('endReached')
     if(this.props.record.total > this.props.record.list.length) {
-      this.props.getRecord(this.props.record.page +1)
+      console.log(this.props.record.page)
+      this.props.getRecord(parseInt(this.props.record.page) +1)
     }
+  }
+  componentDidMount(){
+    this.props.getRecord()
   }
   render(){
     const {record}  = this.props;

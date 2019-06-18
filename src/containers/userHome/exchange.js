@@ -8,6 +8,7 @@ import {formartDate} from '../../util'
 import Header from '../../components/trashHeader'
 import {bindActionCreators} from 'redux'
 import * as ExchangReducerCreator from '../../actions/exchange'
+import * as AuthReducerCreator from '../../actions/auth'
 class ExChange extends React.Component{
 
   static navigationOptions = { 
@@ -16,6 +17,7 @@ class ExChange extends React.Component{
   }
   componentDidMount(){
     this.props.getExchange(1)
+    this.props.freshpoints()
   }
   _renderItem = ({item})=>{
     return (<View style={ScopedStyle.listItem} >
@@ -50,7 +52,7 @@ class ExChange extends React.Component{
           <Iconfont name='jifen' size={40} color={Color.white}></Iconfont>
         </View>
         <View style={{paddingLeft:10}}>
-          <Text style={{color:Color.white,fontSize:20}}>{auth&& auth.userInfo && auth.userInfo.poits || 0}</Text>
+          <Text style={{color:Color.white,fontSize:20}}>{auth && auth.userInfo && auth.userInfo.points || 0}</Text>
           <Text style={{color:Color.white}}>当前积分</Text>
         </View>
       </View>
@@ -84,7 +86,7 @@ const mapStateToProps = (state) => {
   }
 }
 const  mapDispatchToProps = (dispatch)=>{
-  return bindActionCreators({...ExchangReducerCreator},dispatch)
+  return bindActionCreators({...AuthReducerCreator,...ExchangReducerCreator},dispatch)
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(ExChange)
